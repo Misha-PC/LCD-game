@@ -35,6 +35,7 @@ public:
   void clearStr(int);
 
   void playerMove(int);
+  void gameOver();
 
 
 };
