@@ -14,17 +14,19 @@ GameMain game;
 
 void setup()
 {
+  Serial.begin(9600);
   game.init();
+
   while (digitalRead(buttonPin)) {
     delay(10);
   }
   game.printTo(5, 3, "loading...");
+  delay(500);
   game.clearStr(3);
   game.setScore(0);
   game.setLive(3);
   delay(250);
   game.draw();
-  Serial.begin(9600);
 }
 
 int moveDelay, joystickVal;
@@ -37,7 +39,6 @@ void loop()
   if(!digitalRead(buttonPin) && lastLiveDown + 1000 < millis())
   {
     lastLiveDown = millis();
-    // game.playerMove(-1);
     game.draw();
   }
 
