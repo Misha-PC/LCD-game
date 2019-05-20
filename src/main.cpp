@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "game.h"
+#include "pins.h"
 
    // w = 119   65
    // a = 97    68
@@ -8,14 +9,13 @@
    // esc     = 27
    // space   = 32
 
-#define JOY_PIN A0
 
 GameMain game;
 
 void setup()
 {
   game.init();
-  while (digitalRead(A1)) {
+  while (digitalRead(buttonPin)) {
     delay(10);
   }
   game.printTo(5, 3, "loading...");
@@ -34,14 +34,14 @@ void loop()
 {
   game.draw();
   game.drawEat();
-  if(!digitalRead(A1) && lastLiveDown + 1000 < millis())
+  if(!digitalRead(buttonPin) && lastLiveDown + 1000 < millis())
   {
     lastLiveDown = millis();
     // game.playerMove(-1);
     game.draw();
   }
 
-  joystickVal = analogRead(JOY_PIN);
+  joystickVal = analogRead(joystickPin);
   if (joystickVal > 550)
   {
     if(millis() > lastMove + moveDelay)
@@ -51,7 +51,8 @@ void loop()
       game.playerMove(-1);
     }
     moveDelay = 1200 - joystickVal;
-  }else if (joystickVal < 450)
+  }
+  else if (joystickVal < 450)
   {
     if(millis() > lastMove + moveDelay)
     {

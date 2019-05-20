@@ -91,6 +91,13 @@ void GameMain::drawEat()
 {
   if(lastEatMove + moveSpeed - score < millis()){
     lastEatMove = millis();
+    if((x_eat == x_player) and (y_eat > 1))
+    {
+      GameMain::addScore();
+      eat_pos = 0;
+      y_eat = 0;
+      x_eat = random(20);
+    }
     if(eat_pos > 1)
     {
       eat_pos = 0;
@@ -142,7 +149,14 @@ void GameMain::liveDown(int i)
   else if(live < 0) live = 0;
 }
 
-void GameMain::liveDown(){ if(--live < 0) live = 0; }
+void GameMain::liveDown()
+{
+  if(--live < 1)
+  {
+    live = 3;
+    GameMain::gameOver();
+  }
+}
 
 void GameMain::setLive (int i)
 {
@@ -154,6 +168,25 @@ void GameMain::setLive (int i)
 void GameMain::playerMove(int i)
 {
   x_player += i;
-  if(x_player > 19) x_player = 19;
-  else if(x_player<0) x_player = 0;
+  if(x_player > 19) x_player = 0;
+  else if(x_player<0) x_player = 19;
+}
+
+void GameMain::gameOver()
+{
+  lcd.clear();
+  lcd.setCursor(7, 0);
+  lcd.print("Game");
+  lcd.setCursor(7, 1);
+  lcd.print("over");
+  lcd.setCursor(3, 2);
+  lcd.print("Press button..");
+  lcd.setCursor(0, 3);
+  lcd.print("Score:");
+  lcd.print(score);
+  score = 0;
+  while (digitalRead(A1))
+  {
+    delay(10);
+  }
 }
